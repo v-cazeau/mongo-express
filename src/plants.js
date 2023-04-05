@@ -27,12 +27,11 @@ export async function deletePlant(req,res){
 
 export async function updatePlant(req, res) {
     const docID = {"_id": new ObjectId (req.params.docId )};
-    const updatePlant = req.body; 
+    const updatePlant = {$set: req.body}; 
+    const returnOption = { returnNewDocument: true }; 
 
-    await coll.findOneAndUpdate (
-        {"_id": docID},
-        { $set: { updatePlant } }
-    );
-    res.status(201).send({ message: "plant has been updated"})
-
+    const query = await coll.findOneAndUpdate (docID, updatePlant, returnOption); 
+    
+    res.status(201).send({ message: "plant has been updated"});
+    console.table(query.value);
 }
